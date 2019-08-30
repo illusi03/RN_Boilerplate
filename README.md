@@ -5,10 +5,9 @@ Aplikasi Boilerplate Untuk React Native
 
 ## Gambar Aplikasi
 <p float="left">
-  <img src="https://github.com/illusi03/projectRN/blob/master/Screenshots/Screenshot_2019-08-29-17-49-43.png" width="200" height="350" alt="Choose a Service Type"/>
-  <img src="https://github.com/illusi03/projectRN/blob/master/Screenshots/Screenshot_2019-08-29-17-49-56.png" width="200" height="350" alt="Pick Location"/>
-  <img src="https://github.com/illusi03/projectRN/blob/master/Screenshots/Screenshot_2019-08-29-17-50-03.png" width="200" height="350" alt="Finding the truck"/>
-  <img src="https://github.com/illusi03/projectRN/blob/master/Screenshots/Screenshot_2019-08-29-17-50-07.png" width="200" height="350" alt="Order History"/>
+  <img src="https://github.com/illusi03/RNBoilerplateIllusi03/blob/master/screenshot/Screenshot_1567182634.png" width="200" height="350" alt="Choose a Service Type"/>
+  <img src="https://github.com/illusi03/RNBoilerplateIllusi03/blob/master/screenshot/Screenshot_1567182646.png" width="200" height="350" alt="Pick Location"/>
+  <img src="https://github.com/illusi03/RNBoilerplateIllusi03/blob/master/screenshot/Screenshot_1567182650.png" width="200" height="350" alt="Finding the truck"/>
 </p>
 
 
