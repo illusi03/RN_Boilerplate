@@ -1,14 +1,9 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { View, Text } from 'react-native'
 
 import { Styles, Color } from '../../res/Styles'
-import { getUser } from '../../_actions/User'
 
 class ScreenHome extends Component {
-  componentDidMount() {
-    this.props.dispatch(getUser())
-  }
   render() {
     return (
       <View style={[Styles.container, {
@@ -32,9 +27,4 @@ class ScreenHome extends Component {
     )
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    User: state.User
-  }
-}
-export default connect(mapStateToProps)(ScreenHome)
+export default ScreenHome

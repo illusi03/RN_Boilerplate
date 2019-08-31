@@ -1,17 +1,30 @@
 import React, { Component } from 'react'
 import { View, Text, Button } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux'
 
 import { Styles, Color } from '../../res/Styles'
 import { CosEdit, CosButton } from '../../components/Components'
+import { addTransaction } from '../../_actions/Transaction'
 
-export default class ScreenLogin extends Component {
+class ScreenLogin extends Component {
   state = {
-    textNya: 'Kosong'
+    textTblNumber: 'Kosong'
   }
-  aksiChange = (text) => {
+  aksiChangeText = (text) => {
     this.setState({
-      textNya: text
+      textTblNumber: text
     })
+  }
+  aksiSubmit = async () => {
+    await AsyncStorage.setItem('noMeja', `${this.state.textTblNumber}`)
+    //Tambah Data table transaction (Just a tableNumber)
+    await this.props.dispatch(addTransaction({
+      tableNumber: this.state.textTblNumber,
+      isPaid:false
+    }))
+    await AsyncStorage.setItem('idTransaction', `${this.props.Transaction.dataItem.id}`)
+    await this.props.navigation.navigate('StackPrivate')
   }
   render() {
     return (
@@ -27,28 +40,34 @@ export default class ScreenLogin extends Component {
           justifyContent: 'center',
           alignItems: 'center'
         }]}>
-
+          
           <Text style={[Styles.hurufKonten, {
             fontSize: 18,
             fontWeight: 'bold',
           }]}>Harap Login Terlebih Dahulu</Text>
-          <View style={{ width: 250,marginTop:10}}>
-            <CosEdit label='Username'/>
+          <View style={{ width: 250, marginTop: 10 }}>
+            <CosEdit
+              label='Nomor Meja'
+              placeholder='Masukan Nomor Mejanya'
+              keyboardType='numeric'
+              onChangeText={this.aksiChangeText}
+            />
           </View>
-          <View style={{ width: 250,marginTop:10}}>
-            <CosEdit label='Password'/>
-          </View>
-          <View style={{ width: '100%',marginTop:10, flexDirection:'row'}}>
-            <View style={{flex:1,marginHorizontal:5}}>
-              <CosButton label='Login' onPress={()=> this.props.navigation.navigate('StackPrivate')}/>
+          <View style={{ width: '100%', marginTop: 10, flexDirection: 'row' }}>
+            <View style={{ flex: 1, marginHorizontal: 5 }}>
+              <CosButton label='Submit' onPress={this.aksiSubmit} />
             </View>
-            <View style={{flex:1,marginHorizontal:5}}>
-              <CosButton label='Register' onPress={()=> alert('Register')}/>
-            </View>
           </View>
-          
+
         </View>
       </View>
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    Transaction: state.Transaction
+  }
+}
+
+export default connect(mapStateToProps)(ScreenLogin)

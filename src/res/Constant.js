@@ -1,3 +1,3 @@
 export default Constant = {
-  host:'https://jsonplaceholder.typicode.com'
+  host:'http://192.168.0.4:5000/api/v1'
 }

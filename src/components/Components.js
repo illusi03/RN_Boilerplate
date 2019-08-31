@@ -31,6 +31,7 @@ export const CosEdit = (props) => {
         keyboardType={props.keyboardType}
         secureTextEntry={props.secureTextEntry}
         onChangeText={props.onChangeText}
+        placeholder={props.placeholder}
       >
       </TextInput>
     </View>

@@ -3,23 +3,23 @@ initialState = {
   isLoading: true
 }
 
-export default User = (state = initialState, action) => {
+export default Category = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_USER_PENDING':
+    //Untuk Category Master 
+    case 'GET_CATEGORY_PENDING':
       return {
         ...state,
-        dataItem: null,
         isLoading: true
       }
       break
-    case 'GET_USER_FULFILLED':
+    case 'GET_CATEGORY_FULFILLED':
       return {
         ...state,
         dataItem: action.payload.data,
         isLoading: false
       }
       break
-    case 'GET_USER_REJECTED':
+    case 'GET_CATEGORY_REJECTED':
       return {
         ...state,
         dataItem: null,
