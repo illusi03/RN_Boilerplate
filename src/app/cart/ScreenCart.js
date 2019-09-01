@@ -4,15 +4,32 @@ import { View, Text, TouchableOpacity, FlatList, Image, ScrollView, ActivityIndi
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage';
 
+import IconFa from 'react-native-vector-icons/FontAwesome5'
 import Constanta from '../../res/Constant'
 import { Styles, Color } from '../../res/Styles'
+import { getTransaction } from '../../_actions/Transaction'
 
+
+//transactionOrder/:transactionId
 
 class ScreenCart extends Component {
+  state = {
+    tableNumber: ''
+  }
+  getNomorTable = async () => {
+    let noMejaNya = await AsyncStorage.getItem('idTransaction');
+    await this.setState({
+      tableNumber: noMejaNya
+    })
+    this.props.dispatch(getTransaction(this.state.tableNumber))
+  }
+  componentDidMount() {
+    this.getNomorTable()
+  }
   render() {
     return (
       <View style={[Styles.container, {
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
       }]}>
@@ -21,74 +38,111 @@ class ScreenCart extends Component {
         <View style={[Styles.content, Styles.cardSimpleContainer, {
           backgroundColor: Color.whiteColor,
           width: '100%',
-          flex: 7,
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          marginBottom: 5
+          marginBottom: 5,
+          flex: 1
         }]}>
-          <View style={{ height: '100%', width: '100%' }}>
-            <Text style={[Styles.hurufKonten, {
-              fontSize: 17,
-              fontWeight: 'bold',
-              textAlign: 'center',
-              marginBottom: 5
-            }]}>List Menu dari Kategori {this.state.initNameCategory}</Text>
+          <Text style={[Styles.hurufKonten, {
+            fontSize: 20,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginBottom: 5
+          }]}>
+            Daftar Pesanan (Menu)
+          </Text>
 
-              <FlatList
-                data={this.props.Menu.dataItem}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                  <TouchableOpacity style={[Styles.cardSimpleContainer, {
-                    backgroundColor: Color.accentColor,
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    padding: 5,
-                    margin: 5,
-                    height: 100,
-                    flexDirection: 'row',
-                    position: 'relative'
-                  }]}
-                    onPress={() => alert('a')}
-                  >
-                    {false ?
-                      <IconAntDesign
-                        name='star'
-                        size={30}
-                        color='yellow'
-                        style={{
-                          position: 'absolute',
-                          right: 10,
-                          top: 10
-                        }}
-                      ></IconAntDesign>
-                      : false}
+          {/* Divider */}
+          <View
+            style={{
+              borderBottomColor: Color.darkPrimaryColor,
+              borderBottomWidth: 2,
+              width: '100%',
+              marginVertical: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignContent: 'center'
+            }}
+          />
 
-                    <Image source={{ uri: item.image }} style={{ width: 100, height: '100%', marginRight: 20 }}></Image>
-                    <View style={{ flexDirection: 'column' }}>
-                      <Text style={[Styles.hurufKonten, {
-                        fontSize: 15,
-                        fontWeight: 'bold',
-                        textAlign: 'center'
-                      }]}>
-                        {item.name}</Text>
-                      <Text style={[Styles.hurufKonten, {
-                        fontSize: 17,
-                        fontWeight: 'bold',
-                        textAlign: 'left'
-                      }]}>
-                        Rp.{item.price}</Text>
-                    </View>
+
+          {this.props.Transaction.isLoading ?
+            <ActivityIndicator></ActivityIndicator>
+            :
+            <FlatList
+              data={this.props.Transaction.dataItem.orders}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={[Styles.cardSimpleContainer, {
+                  backgroundColor: Color.accentColor,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: 5,
+                  margin: 5,
+                  marginVertical: 20,
+                  flexDirection: 'row',
+                  position: 'relative',
+                  height: 100,
+                  flex:1
+                }]}
+                >
+                  <TouchableOpacity>
+                    <IconFa name='minus-square' size={23} style={{
+                      paddingRight: 10,
+                      paddingLeft: 10
+                    }}></IconFa>
                   </TouchableOpacity>
-                )}
-              />
-            }
-          </View>
+
+                  <Image source={{ uri: item.menu.image }} style={{
+                    width: 100,
+                    height: '100%',
+                    marginRight: 20
+                  }}></Image>
+                  <View style={{ flexDirection: 'column',flex:1}}>
+                    <Text style={[Styles.hurufKonten, {
+                      fontSize: 15,
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }]}>
+                      {item.menu.name}</Text>
+                    <Text style={[Styles.hurufKonten, {
+                      fontSize: 17,
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }]}>
+                      Rp. {item.menu.price}</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <IconFa name='plus-square' size={23} style={{
+                      paddingRight: 10,
+                      paddingLeft: 10
+                    }}></IconFa>
+                  </TouchableOpacity>
+                  <View style={{
+                    position: 'absolute',
+                    right: -0,
+                    top: -15,
+                    width: 30,
+                    height: 30,
+                    backgroundColor: Color.whiteColor,
+                    borderRadius: 50,
+                    borderColor: Color.darkPrimaryColor,
+                    borderWidth: 2,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{item.qty}</Text>
+                  </View>
+                </View>
+              )}
+            />
+          }
         </View>
-
-
       </View>
     )
   }
 }
-const mapStateToProps
+const mapStateToProps = (state) => {
+  return {
+    Transaction: state.Transaction
+  }
+}
 export default connect(mapStateToProps)(ScreenCart)

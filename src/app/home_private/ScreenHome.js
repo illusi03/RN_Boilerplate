@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, TouchableOpacity, FlatList, Image, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, FlatList, Image, ScrollView, ActivityIndicator,ToastAndroid } from 'react-native'
 import IconIon from 'react-native-vector-icons/Ionicons'
 import IconAntDesign from 'react-native-vector-icons/AntDesign'
 
@@ -58,38 +58,49 @@ class ScreenHome extends Component {
   aksiAddOrderMenus = async (menuId, transactionId) => {
     //Cari data Jika isPaid false , Input Order.
     //Cek Data Transaksi (Apakah sudah STATUS PAID / BELUM)
-    const transaksiData = await axios.get(`${Constanta.host}/transaction/${transactionId}`)
-    const menuData = await axios.get(`${Constanta.host}/menu/${menuId}`)
+    let transaksiData 
+    let menuData 
+    try{
+      transaksiData = await axios.get(`${Constanta.host}/transaction/${transactionId}`)
+      menuData = await axios.get(`${Constanta.host}/menu/${menuId}`)
+    }catch(e){
+      console.log(e)
+    }
+    // console.log(`Transaksi Data : ${JSON.stringify(transaksiData)}`)
+    // console.log(`Menu Data : ${JSON.stringify(menuData)}`)
+    // console.log(`jmlMenuData Data : ${JSON.stringify(jmlMenuDataByTrans)}`)
+    
 
     if (!transaksiData.data.isPaid) {
       //Cek jika ada Menu yg sudah terdaftar di Order MenuId dan TransaksiId, Tambah
-
       //Cek Jumlah Order di setiap Transaksi
       //const jumlahSemuaMenuByTransaksi = await axios.get(`${Constanta.host}/transaction/${transactionId}`)
       const jmlMenuDataByTrans = await axios.get(`${Constanta.host}/order/transactionId/${transactionId}/menuId/${menuId}`)
 
-      if (!jmlMenuDataByTrans.data.data) {
+      if (!jmlMenuDataByTrans.data) {
         const dataJadi = {
           menuId,
           transactionId,
-          price: menuData.data.data.price,
+          price: menuData.data.price,
           qty: 1
         }
         // console.log(`Data Belum ada : ${JSON.stringify(dataJadi)}`)
-        alert(`Berhasil Menambahkan Order`)
+        // alert(`Berhasil Menambahkan Order`)
+        ToastAndroid.show('Berhasil Menambahkan Order', ToastAndroid.SHORT);
         this.props.dispatch(addOrder(dataJadi))
       } else {
         //Ambil dulu jumlah Qty nya, lalu Tambahkan + 1
         //Patch Data Where IDOrderNya
-        let idOrderNya = jmlMenuDataByTrans.data.data.id
-        let jmlDataNya = jmlMenuDataByTrans.data.data.qty
+        let idOrderNya = jmlMenuDataByTrans.data.id
+        let jmlDataNya = jmlMenuDataByTrans.data.qty
         jmlDataNya = jmlDataNya + 1
         const dataJadi = {
           qty: jmlDataNya
         }
-        //Counter Qty
+        // Counter Qty
         // console.log(`Data Sudah ada : ${jmlDataNya}`)
-        alert(`Berhasil Menambahkan Order , Jumlah : ${jmlDataNya} `)
+        // alert(`Berhasil Menambahkan Order , Jumlah : ${jmlDataNya} `)
+        ToastAndroid.show(`Berhasil Menambahkan Order , Jumlah : ${jmlDataNya}`, ToastAndroid.SHORT);
         this.props.dispatch(editOrder(idOrderNya, dataJadi))
       }
     } else {
@@ -119,7 +130,7 @@ class ScreenHome extends Component {
     this.getNoMeja()
     this.props.dispatch(getMenu())
     this.props.dispatch(getCategory())
-    // this.cekIsStartedMenus();
+    // this.cekIsStartedMenus()
   }
   render() {
 

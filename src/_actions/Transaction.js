@@ -15,3 +15,9 @@ export const addTransaction = (data) => {
     })
   }
 }
+export const getTransaction = (transactionId) => {
+  return {
+    type: 'GET_TRANSACTION',
+    payload: axios.get(`${Constanta.host}/transactionOrder/${transactionId}`)
+  }
+}

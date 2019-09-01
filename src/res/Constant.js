@@ -1,3 +1,3 @@
 export default Constant = {
-  host:'http://192.168.0.4:5000/api/v1'
+  host:'http://192.168.1.20:5000/api/v1'
 }

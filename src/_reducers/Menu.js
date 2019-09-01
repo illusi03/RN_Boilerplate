@@ -38,7 +38,7 @@ export default Menu = (state = initialState, action) => {
     case 'GET_CATEGORY_MENUS_FULFILLED':
       return {
         ...state,
-        dataItem: action.payload.data.data.menus,
+        dataItem: action.payload.data.menus,
         isLoading: false
       }
       break
